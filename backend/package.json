@@ -1,0 +1,26 @@
+{
+    "name": "backend",
+    "version": "1.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "tsx watch src/index.ts",
+        "build": "tsc --noEmit",
+        "db:generate": "drizzle-kit generate",
+        "db:migrate": "tsx src/migrate.ts",
+        "seed": "tsx src/seed.ts"
+    },
+    "dependencies": {
+        "@hono/node-server": "^1.13.8",
+        "better-auth": "^1.7.23",
+        "dotenv": "^16.4.7",
+        "drizzle-orm": "^0.45.4",
+        "hono": "^4.7.2",
+        "postgres": "^3.4.5",
+        "zod": "^4.6.7"
+    },
+    "devDependencies": {
+        "@types/node": "^22.13.4",
+        "drizzle-kit": "^0.31.11",
+        "tsx": "^4.19.3"
+    }
+}

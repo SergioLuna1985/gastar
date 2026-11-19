@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: gastando
+      POSTGRES_PASSWORD: gastando
+      POSTGRES_DB: gastando
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gastando"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  backend:
+    build: .
+    command: sh -c "npm run db:migrate && npm run seed && npm run dev -w backend"
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://gastando:gastando@db:5432/gastando
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+  frontend:
+    build: .
+    command: npm run dev -w frontend -- --host 0.0.0.0
+    environment:
+      API_PROXY_TARGET: http://backend:3000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+volumes:
+  postgres_data:
